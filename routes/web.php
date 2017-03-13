@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('todo','HomeController');
+
+// Route::post('todo', 'HomeController@store');
+
+// Route::get('todo', 'HomeController@index');
+
+// Route::get('todo/create', 'HomeController@create');
