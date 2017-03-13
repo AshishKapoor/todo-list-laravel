@@ -7,7 +7,6 @@ use App\todo;
 use DB;
 use DateTime;
 
-
 class HomeController extends Controller
 {
     /**
@@ -42,13 +41,14 @@ class HomeController extends Controller
         $todo = new todo;
         $now = new DateTime();
 
+        $this->validate($request, ['body'=>'required|unique:todos']);
+
         $todo->body = $request->body;
         $todo->created_at = $now;
         $todo->updated_at = $now;
 
         $todo->save();
         return redirect('todo');
-        // DB::insert('insert into todos (body) values(?)',[$request->body]);
         // return $request->all();
     }
 
