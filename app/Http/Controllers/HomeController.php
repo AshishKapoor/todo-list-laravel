@@ -39,17 +39,19 @@ class HomeController extends Controller
     public function store(Request $request)
     {
         $todo = new todo;
-        $now = new DateTime();
 
-        $this->validate($request, ['body'=>'required|unique:todos']);
+        $this->validate($request, ['title'=>'required|unique:todos']);
+        $this->validate($request, ['body'=>'required']);
 
+        $todo->title = $request->title;
         $todo->body = $request->body;
-        $todo->created_at = $now;
-        $todo->updated_at = $now;
 
         $todo->save();
+
+        session()->flash('message',"Created  ".$todo->id." Successfully");
+
+
         return redirect('todo');
-        // return $request->all();
     }
 
     /**
@@ -60,7 +62,8 @@ class HomeController extends Controller
      */
     public function show($id)
     {
-        //
+        $item = todo::find($id);
+        return view('todo.show', compact('item'));
     }
 
     /**
@@ -71,7 +74,8 @@ class HomeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $item = todo::find($id);
+        return view('todo.edit',compact('item'));
     }
 
     /**
@@ -83,7 +87,20 @@ class HomeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $todo = todo::find($id);
+        $now = new DateTime();
+
+        $this->validate($request, ['title'=>'required']);
+        $this->validate($request, ['body'=>'required']);
+
+        $todo->title = $request->title;
+        $todo->body = $request->body;
+
+        $todo->save();
+
+        session()->flash('message',"Updated " .$todo->id. " Successfully");
+
+        return redirect('todo');
     }
 
     /**
@@ -94,6 +111,10 @@ class HomeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = todo::find($id);
+        $item->delete();
+        session()->flash('message',"Deleted ".$item->id." Successfully");
+
+        return redirect('/todo');
     }
 }

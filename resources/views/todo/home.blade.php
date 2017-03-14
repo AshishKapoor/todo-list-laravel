@@ -2,25 +2,39 @@
 
 @section('body')
     <br>
+
+    @include('todo.partial.message')
+
     <a href="todo/create" class="btn btn-info">Add New</a>
-    <div class="col-lg-4 col-lg-offset-4">
-        <h1>Todo Lists</h1>
-        <ul class="list-group">
-            @foreach ($todos as $todo)
-            
-                <li class="list-group-item">
-                    {{$todo->body}}
-                    <span class="pull-right">{{$todo->created_at->diffForHumans()}}</span>
-                </li>
-                
-          @endforeach
+    <div class="col-lg-6 col-lg-offset-3">
+        <center><h1>Todo Lists</h1></center>
+        <ul class="list-group col-lg-8">
+        @foreach ($todos as $todo)
+            <li class="list-group-item">
+                <a href="{{'/todo/'.$todo->id}}">{{$todo->title}}</a>
+                <span class="pull-right">{{$todo->created_at->diffForHumans()}}</span>
+            </li>
+        @endforeach
         </ul>
-        @if (count($errors)>0)
-        <div class="alert alert-warning"> 
-            @foreach ($errors->all() as $error)
-                {{$error}}
+
+        <ul class="list-group col-lg-4">
+            @foreach ($todos as $todo)
+                <li class="list-group-item">
+                    <a style="border:none;" href="{{'/todo/'.$todo->id.'/edit'}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+                    <form class="form-group pull-right" action="{{'/todo/'.$todo->id}}" method="post">
+                        {{csrf_field()}}
+                        {{ method_field('DELETE') }}
+
+                        <button type="submit" style="border:none;">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
+                    </form>
+
+                </li>
             @endforeach
-        </div>
-        @endif
+        </ul>
+
     </div>
+
 @endsection
