@@ -16,3 +16,7 @@ Route::get('/', function () {
 });
 
 Route::resource('todo','HomeController');
+
+Route::get('/file', function(){
+    return view('file.home');
+});
